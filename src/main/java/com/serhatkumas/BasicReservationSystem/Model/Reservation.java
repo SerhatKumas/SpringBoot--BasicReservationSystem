@@ -1,10 +1,23 @@
 package com.serhatkumas.BasicReservationSystem.Model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Entity
+@Table
 public class Reservation {
-
+    @Id
+    @SequenceGenerator(
+            name = "reservation",
+            sequenceName = "reservation_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "reservation_sequence"
+    )
     private Long reservation_id;
 
     private LocalDate reservation_date;
