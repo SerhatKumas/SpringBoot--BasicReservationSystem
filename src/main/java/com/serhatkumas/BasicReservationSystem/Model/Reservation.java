@@ -1,7 +1,6 @@
 package com.serhatkumas.BasicReservationSystem.Model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -30,28 +29,27 @@ public class Reservation {
 
     private int customer_age;
 
+    @Transient
     private String reservation_code;
 
     public Reservation() {
     }
 
-    public Reservation(Long reservation_id, LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age, String reservation_code) {
+    public Reservation(Long reservation_id, LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
         this.reservation_id = reservation_id;
         this.reservation_date = reservation_date;
         this.reservation_time = reservation_time;
         this.customer_name = customer_name;
         this.customer_phone_number = customer_phone_number;
         this.customer_age = customer_age;
-        this.reservation_code = reservation_code;
     }
 
-    public Reservation(LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age, String reservation_code) {
+    public Reservation(LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
         this.reservation_date = reservation_date;
         this.reservation_time = reservation_time;
         this.customer_name = customer_name;
         this.customer_phone_number = customer_phone_number;
         this.customer_age = customer_age;
-        this.reservation_code = reservation_code;
     }
 
     public Long getReservation_id() {
@@ -103,23 +101,7 @@ public class Reservation {
     }
 
     public String getReservation_code() {
-        return reservation_code;
+        return "NLF"+reservation_date.getMonthValue()+reservation_time.getHour()+reservation_id+reservation_date.getDayOfMonth();
     }
 
-    public void setReservation_code(String reservation_code) {
-        this.reservation_code = reservation_code;
-    }
-
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "reservation_id=" + reservation_id +
-                ", reservation_date=" + reservation_date +
-                ", reservation_time=" + reservation_time +
-                ", customer_name='" + customer_name + '\'' +
-                ", customer_phone_number='" + customer_phone_number + '\'' +
-                ", customer_age=" + customer_age +
-                ", reservation_code='" + reservation_code + '\'' +
-                '}';
-    }
 }
