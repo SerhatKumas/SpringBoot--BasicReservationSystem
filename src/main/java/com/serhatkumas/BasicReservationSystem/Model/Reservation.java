@@ -29,27 +29,28 @@ public class Reservation {
 
     private int customer_age;
 
-    @Transient
     private String reservation_code;
 
     public Reservation() {
     }
 
-    public Reservation(Long reservation_id, LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
+    public Reservation(Long reservation_id, String reservation_code, LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
         this.reservation_id = reservation_id;
         this.reservation_date = reservation_date;
         this.reservation_time = reservation_time;
         this.customer_name = customer_name;
         this.customer_phone_number = customer_phone_number;
         this.customer_age = customer_age;
+        this.reservation_code = reservation_code;
     }
 
-    public Reservation(LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
+    public Reservation(String reservation_code, LocalDate reservation_date,LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
         this.reservation_date = reservation_date;
         this.reservation_time = reservation_time;
         this.customer_name = customer_name;
         this.customer_phone_number = customer_phone_number;
         this.customer_age = customer_age;
+        this.reservation_code = reservation_code;
     }
 
     public Long getReservation_id() {
@@ -101,7 +102,10 @@ public class Reservation {
     }
 
     public String getReservation_code() {
-        return "NLF"+reservation_date.getMonthValue()+reservation_time.getHour()+reservation_id+reservation_date.getDayOfMonth();
+        return this.reservation_code;
+    }
+    public void setReservation_code(String reservation_code) {
+        this.reservation_code=reservation_code;
     }
 
 }

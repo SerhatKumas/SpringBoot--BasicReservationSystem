@@ -14,4 +14,7 @@ public interface IReservationDAL extends
 
     @Query("SELECT r FROM Reservation r WHERE r.customer_name=?1 AND r.reservation_date > ?2")
     Optional<Reservation> findReservationByCustomer_nameAndReservation_dateAfter(String customer_name, LocalDate localDate);
+
+    @Query("SELECT r FROM Reservation r WHERE r.reservation_code =?1")
+    Optional<Reservation> findReservationByReservation_code(String reservation_id);
 }
