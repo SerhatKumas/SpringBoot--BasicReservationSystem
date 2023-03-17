@@ -19,7 +19,7 @@ public class ReservationConfig {
             IReservationDAL reservationDAL){
         return args -> {
                 Reservation r1 = new Reservation("NLFSe3152520",
-                        LocalDate.of(2023, Month.MARCH, 20),
+                        LocalDate.of(2023, Month.MARCH, 8),
                         LocalTime.of(15,45),"Serhat Kumas","05516217943",
                         6
                 );
@@ -58,8 +58,8 @@ public class ReservationConfig {
                     20
             );
             Reservation r8 = new Reservation("NLFBi12152520",
-                    LocalDate.of(2023, Month.DECEMBER, 20),
-                    LocalTime.of(15,45),"Bilgehan Savgu","05716217943",
+                    LocalDate.of(2023, Month.MARCH, 18),
+                    LocalTime.of(1,45),"Bilgehan Savgu","05716217943",
                     18
             );
 

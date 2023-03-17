@@ -85,6 +85,16 @@ public class ReservationController {
        return reservationService.getAllReservationOfCustomerByName(customer_name);
     }
 
+    @GetMapping(path = "show-reservations-of-today")
+    public List<Reservation> getReservationsOfToday(){
+        return reservationService.getReservationsOfToday();
+    }
+
+    @GetMapping(path = "show-remaining-reservations-today")
+    public List<Reservation> getRestOfTheReservationsToday(){
+        return reservationService.getRestOfTheReservationsToday();
+    }
+
     @GetMapping(path = "/show-active-reservations-by-name")
     public Optional<Reservation> getActiveReservationOfCustomerByName( @RequestBody String query_info){
         JSONObject json = null;
@@ -99,8 +109,8 @@ public class ReservationController {
         return reservationService.getActiveReservationOfCustomerByName(customer_name);
     }
 
-    @GetMapping(path = "/show-active-reservations-by-name-date")
-    public Reservation getActiveReservationOfCustomerByNameAndDateAfter( @RequestBody String query_info){
+    @GetMapping(path = "/show-active-reservations-after-certain-date-by-name-date")
+    public Reservation getActiveReservationOfCustomerAfterCertainDateByNameAndDate( @RequestBody String query_info){
         JSONObject json = null;
         String customer_name = "";
         LocalDate date = null;
@@ -112,7 +122,7 @@ public class ReservationController {
         catch(JSONException e){
             throw new RuntimeException(e);
         }
-        return reservationService.getActiveReservationOfCustomerByNameAndDateAfter(customer_name, date);
+        return reservationService.getActiveReservationOfCustomerAfterCertainDateByNameAndDate(customer_name, date);
     }
 
     @GetMapping(path = "show-reservations-date-time")
@@ -131,7 +141,6 @@ public class ReservationController {
     }
 
     @PostMapping(path = "create-reservation")
-    @ResponseStatus(HttpStatus.CREATED)
     public void addNewReservation(@RequestBody Reservation reservation){
         reservationService.addNewReservation(reservation);
     }

@@ -45,12 +45,20 @@ public class ReservationService {
         return reservationDAL.getAllReservationOfCustomerByName(customer_name);
     }
 
-    public Optional<Reservation> getActiveReservationOfCustomerByName(String customer_name){
-        return reservationDAL.getActiveReservationOfCustomerByNameAndDateAfter(customer_name, LocalDate.now());
+    public List<Reservation> getReservationsOfToday(){
+        return reservationDAL.getReservationsByDate(LocalDate.now());
     }
 
-    public Reservation getActiveReservationOfCustomerByNameAndDateAfter(String customer_name, LocalDate date){
-        Optional<Reservation> reservation =  reservationDAL.getActiveReservationOfCustomerByNameAndDateAfter(customer_name, date);
+    public List<Reservation> getRestOfTheReservationsToday(){
+        return reservationDAL.getRestOfTheReservationsToday(LocalDate.now(), LocalTime.now());
+    }
+
+    public Optional<Reservation> getActiveReservationOfCustomerByName(String customer_name){
+        return reservationDAL.getActiveReservationOfCustomerAfterCertainDateByNameAndDate(customer_name, LocalDate.now());
+    }
+
+    public Reservation getActiveReservationOfCustomerAfterCertainDateByNameAndDate(String customer_name, LocalDate date){
+        Optional<Reservation> reservation =  reservationDAL.getActiveReservationOfCustomerAfterCertainDateByNameAndDate(customer_name, date);
         if(reservation.isPresent()){
             return reservation.get();
         }
@@ -64,8 +72,8 @@ public class ReservationService {
     }
 
     public void addNewReservation(Reservation reservation){
-       Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.getActiveReservationOfCustomerByNameAndDateAfter(reservation.getCustomer_name(), LocalDate.now());
-        if(!LocalDate.now().isBefore(reservation.getReservation_date())){
+       Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.getActiveReservationOfCustomerAfterCertainDateByNameAndDate(reservation.getCustomer_name(), LocalDate.now());
+        if(LocalDate.now().isAfter(reservation.getReservation_date()) || (LocalDate.now().isEqual(reservation.getReservation_date()) && LocalTime.now().isAfter(reservation.getReservation_time())) ){
             throw new IllegalStateException("Date can not be chosen before today.");
         }
         else if(reservationByCustomerNameAndAfterToday.isPresent()){

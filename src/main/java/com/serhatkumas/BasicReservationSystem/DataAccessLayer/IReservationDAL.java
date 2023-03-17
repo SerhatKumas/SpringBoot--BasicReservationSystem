@@ -29,11 +29,14 @@ public interface IReservationDAL extends
     @Query("Select r From Reservation r Where r.customer_name=?1")
     List<Reservation> getAllReservationOfCustomerByName(String customer_name);
 
+    @Query("SELECT r FROM Reservation r WHERE r.reservation_date =?1 AND r.reservation_time>?2")
+    List<Reservation> getRestOfTheReservationsToday(LocalDate date, LocalTime time);
+
     @Query("Select r From Reservation r Where r.reservation_date=?1 AND r.reservation_time =?2")
     Optional<Reservation> getReservationByDateAndTime(LocalDate date, LocalTime time);
 
-    @Query("SELECT r FROM Reservation r WHERE r.customer_name=?1 AND r.reservation_date >?2")
-    Optional<Reservation> getActiveReservationOfCustomerByNameAndDateAfter(String customer_name, LocalDate date);
+    @Query("SELECT r FROM Reservation r WHERE r.customer_name=?1 AND r.reservation_date >=?2")
+    Optional<Reservation> getActiveReservationOfCustomerAfterCertainDateByNameAndDate(String customer_name, LocalDate date);
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_code =?1")
     Optional<Reservation> getReservationByReservationCode(String reservation_id);
