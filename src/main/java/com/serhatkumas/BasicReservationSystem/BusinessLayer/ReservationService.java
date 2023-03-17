@@ -41,6 +41,10 @@ public class ReservationService {
         return reservationDAL.getReservationsByDate(date);
     }
 
+    public Optional<Reservation> getReservationByDateAndTime(LocalDate date, LocalTime time) {
+        return reservationDAL.getReservationByDateAndTime(date, time);
+    }
+
     public void addNewReservation(Reservation reservation){
        Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.findReservationByCustomer_nameAndReservation_dateAfter(reservation.getCustomer_name(), LocalDate.now());
         if(!LocalDate.now().isBefore(reservation.getReservation_date())){

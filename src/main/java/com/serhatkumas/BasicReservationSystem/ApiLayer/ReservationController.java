@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "reservation-api")
@@ -68,6 +69,21 @@ public class ReservationController {
             throw new RuntimeException(e);
         }
         return reservationService.getReservationsByDate(date);
+    }
+
+    @GetMapping(path = "show-reservations-date-time")
+    public Optional<Reservation> getReservationByDateAndTime(@RequestBody String date_and_time_info){
+        JSONObject json = null;
+        LocalDate date = null;
+        LocalTime time = null;
+        try {
+            json = new JSONObject(date_and_time_info);
+            date = LocalDate.parse(json.getString("date"));
+            time = LocalTime.parse(json.getString("time"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return reservationService.getReservationByDateAndTime(date, time);
     }
 
     @PostMapping(path = "create-reservation")

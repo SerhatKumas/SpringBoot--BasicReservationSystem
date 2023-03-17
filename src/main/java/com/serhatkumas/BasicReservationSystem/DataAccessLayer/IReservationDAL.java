@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public interface IReservationDAL extends
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_date = ?1")
     List<Reservation> getReservationsByDate(LocalDate date);
+
+    @Query("Select r From Reservation r Where r.reservation_date=?1 AND r.reservation_time =?2")
+    Optional<Reservation> getReservationByDateAndTime(LocalDate date, LocalTime time);
 
     @Query("SELECT r FROM Reservation r WHERE r.customer_name=?1 AND r.reservation_date > ?2")
     Optional<Reservation> findReservationByCustomer_nameAndReservation_dateAfter(String customer_name, LocalDate date);
