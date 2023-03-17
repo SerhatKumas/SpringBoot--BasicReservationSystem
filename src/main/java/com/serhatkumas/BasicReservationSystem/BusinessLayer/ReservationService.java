@@ -41,12 +41,16 @@ public class ReservationService {
         return reservationDAL.getReservationsByDate(date);
     }
 
+    public List<Reservation> getAllReservationOfCustomerByName(String customer_name){
+        return reservationDAL.getAllReservationOfCustomerByName(customer_name);
+    }
+
     public Optional<Reservation> getReservationByDateAndTime(LocalDate date, LocalTime time) {
         return reservationDAL.getReservationByDateAndTime(date, time);
     }
 
     public void addNewReservation(Reservation reservation){
-       Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.getReservationByCustomerNameAndReservationDateAfter(reservation.getCustomer_name(), LocalDate.now(), LocalTime.now());
+       Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.getActiveReservationOfCustomerByNameAndDate(reservation.getCustomer_name(), LocalDate.now(), LocalTime.now());
         if(!LocalDate.now().isBefore(reservation.getReservation_date())){
             throw new IllegalStateException("Date can not be chosen before today.");
         }

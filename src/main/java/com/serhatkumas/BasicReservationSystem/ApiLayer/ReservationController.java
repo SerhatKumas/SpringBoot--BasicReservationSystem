@@ -71,6 +71,20 @@ public class ReservationController {
         return reservationService.getReservationsByDate(date);
     }
 
+    @GetMapping(path = "/show-all-reservations-by-name")
+    public List<Reservation> getAllReservatonsOfCustomerByName( @RequestBody String customer_info){
+        JSONObject json = null;
+        String customer_name = "";
+        try{
+           json = new JSONObject(customer_info);
+           customer_name = json.getString("customer_name");
+        }
+        catch(JSONException e){
+            throw new RuntimeException(e);
+        }
+       return reservationService.getAllReservationOfCustomerByName(customer_name);
+    }
+
     @GetMapping(path = "show-reservations-date-time")
     public Optional<Reservation> getReservationByDateAndTime(@RequestBody String date_and_time_info){
         JSONObject json = null;
