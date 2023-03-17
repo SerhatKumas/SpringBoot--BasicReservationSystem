@@ -46,7 +46,7 @@ public class ReservationService {
     }
 
     public void addNewReservation(Reservation reservation){
-       Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.findReservationByCustomer_nameAndReservation_dateAfter(reservation.getCustomer_name(), LocalDate.now());
+       Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.getReservationByCustomerNameAndReservationDateAfter(reservation.getCustomer_name(), LocalDate.now(), LocalTime.now());
         if(!LocalDate.now().isBefore(reservation.getReservation_date())){
             throw new IllegalStateException("Date can not be chosen before today.");
         }
@@ -58,7 +58,7 @@ public class ReservationService {
     }
 
     public void deleteReservation(String reservation_code){
-        Optional<Reservation> reservation = reservationDAL.findReservationByReservation_code(reservation_code);
+        Optional<Reservation> reservation = reservationDAL.getReservationByReservationCode(reservation_code);
         if(reservation.isEmpty()){
             throw new IllegalStateException("Reservation with code " + reservation_code +" does not exists and can not be deleted.");
         }
@@ -67,7 +67,7 @@ public class ReservationService {
 
     @Transactional
     public void updateReservation(String reservation_code, LocalDate date, LocalTime time) {
-        Optional<Reservation> reservation = reservationDAL.findReservationByReservation_code(reservation_code);
+        Optional<Reservation> reservation = reservationDAL.getReservationByReservationCode(reservation_code);
         if(reservation.isEmpty()){
             throw new IllegalStateException("Reservation with code " + reservation_code +" does not exists and can not be updated.");
         }

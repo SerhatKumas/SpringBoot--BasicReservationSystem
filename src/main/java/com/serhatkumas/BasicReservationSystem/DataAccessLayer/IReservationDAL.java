@@ -29,11 +29,11 @@ public interface IReservationDAL extends
     @Query("Select r From Reservation r Where r.reservation_date=?1 AND r.reservation_time =?2")
     Optional<Reservation> getReservationByDateAndTime(LocalDate date, LocalTime time);
 
-    @Query("SELECT r FROM Reservation r WHERE r.customer_name=?1 AND r.reservation_date > ?2")
-    Optional<Reservation> findReservationByCustomer_nameAndReservation_dateAfter(String customer_name, LocalDate date);
+    @Query("SELECT r FROM Reservation r WHERE r.customer_name=?1 AND r.reservation_date >?2 AND r.reservation_time>?3")
+    Optional<Reservation> getReservationByCustomerNameAndReservationDateAfter(String customer_name, LocalDate date, LocalTime time);
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_code =?1")
-    Optional<Reservation> findReservationByReservation_code(String reservation_id);
+    Optional<Reservation> getReservationByReservationCode(String reservation_id);
 
     //SELECT 'customer_name' FROM 'reservation' GROUP BY 'customer_name' ORDER BY COUNT(*) DESC LIMIT 1;
 }
