@@ -43,13 +43,13 @@ public class ReservationController {
 
     @GetMapping(path = "show-reservations-between")
     public List<Reservation> getReservationsBetweenDates(
-            @RequestBody String date_info){
+            @RequestBody String query_info){
 
         JSONObject json = null;
         LocalDate from = null;
         LocalDate until = null;
         try {
-            json = new JSONObject(date_info);
+            json = new JSONObject(query_info);
             from = LocalDate.parse(json.getString("from"));
             until = LocalDate.parse(json.getString("until"));
         } catch (JSONException e) {
@@ -59,11 +59,11 @@ public class ReservationController {
     }
 
     @GetMapping(path = "show-reservations-date")
-    public List<Reservation> getReservationByDate(@RequestBody String date_info){
+    public List<Reservation> getReservationsByDate(@RequestBody String query_info){
         JSONObject json = null;
         LocalDate date = null;
         try {
-            json = new JSONObject(date_info);
+            json = new JSONObject(query_info);
             date = LocalDate.parse(json.getString("date"));
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -72,11 +72,11 @@ public class ReservationController {
     }
 
     @GetMapping(path = "/show-all-reservations-by-name")
-    public List<Reservation> getAllReservatonsOfCustomerByName( @RequestBody String customer_info){
+    public List<Reservation> getAllReservationOfCustomerByName( @RequestBody String query_info){
         JSONObject json = null;
         String customer_name = "";
         try{
-           json = new JSONObject(customer_info);
+           json = new JSONObject(query_info);
            customer_name = json.getString("customer_name");
         }
         catch(JSONException e){
@@ -85,13 +85,43 @@ public class ReservationController {
        return reservationService.getAllReservationOfCustomerByName(customer_name);
     }
 
+    @GetMapping(path = "/show-active-reservations-by-name")
+    public Optional<Reservation> getActiveReservationOfCustomerByName( @RequestBody String query_info){
+        JSONObject json = null;
+        String customer_name = "";
+        try{
+            json = new JSONObject(query_info);
+            customer_name = json.getString("customer_name");
+        }
+        catch(JSONException e){
+            throw new RuntimeException(e);
+        }
+        return reservationService.getActiveReservationOfCustomerByName(customer_name);
+    }
+
+    @GetMapping(path = "/show-active-reservations-by-name-date")
+    public Reservation getActiveReservationOfCustomerByNameAndDateAfter( @RequestBody String query_info){
+        JSONObject json = null;
+        String customer_name = "";
+        LocalDate date = null;
+        try{
+            json = new JSONObject(query_info);
+            customer_name = json.getString("customer_name");
+            date = LocalDate.parse(json.getString("date"));
+        }
+        catch(JSONException e){
+            throw new RuntimeException(e);
+        }
+        return reservationService.getActiveReservationOfCustomerByNameAndDateAfter(customer_name, date);
+    }
+
     @GetMapping(path = "show-reservations-date-time")
-    public Optional<Reservation> getReservationByDateAndTime(@RequestBody String date_and_time_info){
+    public Optional<Reservation> getReservationByDateAndTime(@RequestBody String query_info){
         JSONObject json = null;
         LocalDate date = null;
         LocalTime time = null;
         try {
-            json = new JSONObject(date_and_time_info);
+            json = new JSONObject(query_info);
             date = LocalDate.parse(json.getString("date"));
             time = LocalTime.parse(json.getString("time"));
         } catch (JSONException e) {
@@ -102,16 +132,16 @@ public class ReservationController {
 
     @PostMapping(path = "create-reservation")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createNewReservation(@RequestBody Reservation reservation){
+    public void addNewReservation(@RequestBody Reservation reservation){
         reservationService.addNewReservation(reservation);
     }
 
     @DeleteMapping(path = "delete-reservation")
-    public void deleteReservation(@RequestBody String delete_info){
+    public void deleteReservation(@RequestBody String query_info){
         JSONObject json = null;
         String reservation_code = "";
         try {
-            json = new JSONObject(delete_info);
+            json = new JSONObject(query_info);
             reservation_code = json.getString("reservation_code");
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -121,14 +151,14 @@ public class ReservationController {
 
     @PutMapping(path = "update-reservation")
     public void updateReservation(
-            @RequestBody String update_info){
+            @RequestBody String query_info){
 
         JSONObject json = null;
         String reservation_code = "";
         LocalDate date = null;
         LocalTime time = null;
         try {
-            json = new JSONObject(update_info);
+            json = new JSONObject(query_info);
             reservation_code = json.getString("reservation_code");
             date = LocalDate.parse(json.getString("date"));
             time = LocalTime.parse(json.getString("time"));
