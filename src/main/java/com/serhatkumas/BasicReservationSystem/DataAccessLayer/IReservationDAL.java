@@ -14,19 +14,19 @@ public interface IReservationDAL extends
         JpaRepository<Reservation, Long> {
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_date >= ?1")
-    List<Reservation> getReservationsAfterRequestedDate(LocalDate localDate);
+    List<Reservation> getReservationsAfterRequestedDate(LocalDate date);
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_date <= ?1")
-    List<Reservation> getReservationsBeforeRequestedDate(LocalDate localDate);
+    List<Reservation> getReservationsBeforeRequestedDate(LocalDate date);
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_date > ?1 AND r.reservation_date < ?2")
     List<Reservation> getReservationsBetweenDates(LocalDate from, LocalDate until);
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_date = ?1")
-    List<Reservation> getReservationsByDate(LocalDate localDate);
+    List<Reservation> getReservationsByDate(LocalDate date);
 
     @Query("SELECT r FROM Reservation r WHERE r.customer_name=?1 AND r.reservation_date > ?2")
-    Optional<Reservation> findReservationByCustomer_nameAndReservation_dateAfter(String customer_name, LocalDate localDate);
+    Optional<Reservation> findReservationByCustomer_nameAndReservation_dateAfter(String customer_name, LocalDate date);
 
     @Query("SELECT r FROM Reservation r WHERE r.reservation_code =?1")
     Optional<Reservation> findReservationByReservation_code(String reservation_id);

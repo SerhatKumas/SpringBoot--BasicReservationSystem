@@ -6,6 +6,7 @@ import com.serhatkumas.BasicReservationSystem.Model.Reservation;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,24 +42,33 @@ public class ReservationController {
 
     @GetMapping(path = "show-reservations-between")
     public List<Reservation> getReservationsBetweenDates(
-            @RequestBody String dateInfo){
+            @RequestBody String date_info){
 
         JSONObject json = null;
-        String from = "";
-        String until = "";
+        LocalDate from = null;
+        LocalDate until = null;
         try {
-            json = new JSONObject(dateInfo);
-            from = json.getString("from");
-            until = json.getString("until");
+            json = new JSONObject(date_info);
+            from = LocalDate.parse(json.getString("from"));
+            until = LocalDate.parse(json.getString("until"));
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        LocalDate dateFrom = LocalDate.parse(from);
-        LocalDate dateUntil = LocalDate.parse(until);
-         return reservationService.getReservationsBetweenDates(dateFrom, dateUntil);
+         return reservationService.getReservationsBetweenDates(from, until);
     }
 
-
+    @GetMapping(path = "show-reservations-date")
+    public List<Reservation> getReservationByDate(@RequestBody String date_info){
+        JSONObject json = null;
+        LocalDate date = null;
+        try {
+            json = new JSONObject(date_info);
+            date = LocalDate.parse(json.getString("date"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return reservationService.getReservationsByDate(date);
+    }
 
     @PostMapping(path = "create-reservation")
     @ResponseStatus(HttpStatus.CREATED)
@@ -67,13 +77,34 @@ public class ReservationController {
     }
 
     @DeleteMapping(path = "delete-reservation")
-    public void deleteReservation(@RequestBody String reservation_code){
+    public void deleteReservation(@RequestBody String delete_info){
+        JSONObject json = null;
+        String reservation_code = "";
+        try {
+            json = new JSONObject(delete_info);
+            reservation_code = json.getString("reservation_code");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         reservationService.deleteReservation(reservation_code);
     }
 
     @PutMapping(path = "update-reservation")
     public void updateReservation(
-            @RequestBody String reservation_code, LocalDate date, LocalTime time){
+            @RequestBody String update_info){
+
+        JSONObject json = null;
+        String reservation_code = "";
+        LocalDate date = null;
+        LocalTime time = null;
+        try {
+            json = new JSONObject(update_info);
+            reservation_code = json.getString("reservation_code");
+            date = LocalDate.parse(json.getString("date"));
+            time = LocalTime.parse(json.getString("time"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         reservationService.updateReservation(reservation_code, date, time);
     }
 

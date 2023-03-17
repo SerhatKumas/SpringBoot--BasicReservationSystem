@@ -37,6 +37,10 @@ public class ReservationService {
         return reservationDAL.getReservationsBetweenDates(from, until);
     }
 
+    public List<Reservation> getReservationsByDate(LocalDate date) {
+        return reservationDAL.getReservationsByDate(date);
+    }
+
     public void addNewReservation(Reservation reservation){
        Optional<Reservation> reservationByCustomerNameAndAfterToday = reservationDAL.findReservationByCustomer_nameAndReservation_dateAfter(reservation.getCustomer_name(), LocalDate.now());
         if(!LocalDate.now().isBefore(reservation.getReservation_date())){
