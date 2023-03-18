@@ -106,4 +106,29 @@ public class ReservationService {
         }
 
     }
+
+    public int getHowManyCustomersOnCertainDate(LocalDate date){
+        return reservationDAL.getHowManyCustomersOnCertainDate(date);
+    }
+
+    public int getHowManyCustomersToday() {
+        return reservationDAL.getHowManyCustomersOnCertainDate(LocalDate.now());
+    }
+
+    public int getHowManyRemainingCustomersRestOfToday() {
+        return reservationDAL.getHowManyRemainingCustomersRestOfToday(LocalDate.now(), LocalTime.now());
+    }
+
+    public String getBestCustomerByRank(int order) {
+        List<String> reservationList = reservationDAL.getCustomerListInOrderOfNumberOfVisit();
+        String customer_name = reservationList.get(order);
+        if (customer_name != null){
+            return "Name : " + customer_name;
+        }
+        throw new IllegalStateException("There is no customer who has visited you store");
+    }
+
+    public int getNumberOfTotalCustomer() {
+        return reservationDAL.getCustomerListInOrderOfNumberOfVisit().size();
+    }
 }

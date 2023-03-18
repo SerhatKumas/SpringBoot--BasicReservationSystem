@@ -26,6 +26,11 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
+    @GetMapping()
+    public String showWelcomeMessage(){
+        return "Welcome to Reservation Api, enter url to reach end point you want";
+    }
+
     @GetMapping(path = "show-all-reservations")
     public List<Reservation> getAllReservations(){
         return reservationService.getAllReservations();
@@ -175,6 +180,47 @@ public class ReservationController {
             throw new RuntimeException(e);
         }
         reservationService.updateReservation(reservation_code, date, time);
+    }
+
+    @GetMapping(path = "how-many-customers-date")
+    public int getHowManyCustomersOnCertainDate( @RequestBody String query_info){
+        JSONObject json = null;
+        LocalDate date = null;
+        try {
+            json = new JSONObject(query_info);
+            date = LocalDate.parse(json.getString("date"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return reservationService.getHowManyCustomersOnCertainDate(date);
+    }
+
+    @GetMapping(path = "how-many-customers-today")
+    public int getHowManyCustomersOnCertainDate(){
+        return reservationService.getHowManyCustomersToday();
+    }
+
+    @GetMapping(path = "how-many-remaining-customers-today")
+    public int getHowManyRemainingCustomersRestOfToday(){
+        return reservationService.getHowManyRemainingCustomersRestOfToday();
+    }
+
+    @GetMapping(path = "show-total-number-customer")
+    public int getNumberOfTotalCustomer(){
+        return reservationService.getNumberOfTotalCustomer();
+    }
+
+    @GetMapping(path = "show-best-customer")
+    public String getBestCustomerByRank(@RequestBody String query_info){
+        JSONObject json = null;
+        int rank = 0;
+        try {
+            json = new JSONObject(query_info);
+            rank = Integer.parseInt(json.getString("rank")) - 1;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return reservationService.getBestCustomerByRank(rank);
     }
 
 }

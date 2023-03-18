@@ -41,5 +41,14 @@ public interface IReservationDAL extends
     @Query("SELECT r FROM Reservation r WHERE r.reservation_code =?1")
     Optional<Reservation> getReservationByReservationCode(String reservation_id);
 
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.reservation_date =?1")
+    int getHowManyCustomersOnCertainDate(LocalDate date);
+
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.reservation_date =?1 AND r.reservation_time>=?2")
+    int getHowManyRemainingCustomersRestOfToday(LocalDate date, LocalTime time);
+
+    @Query("SELECT r.customer_name FROM Reservation r GROUP BY r.customer_name ORDER BY COUNT(r) DESC")
+    List<String> getCustomerListInOrderOfNumberOfVisit();
+
     //SELECT 'customer_name' FROM 'reservation' GROUP BY 'customer_name' ORDER BY COUNT(*) DESC LIMIT 1;
 }
