@@ -104,7 +104,7 @@ public class ReservationService {
     //Getting nth best customer according to number of visit they have done
     public String getBestCustomerByRank(int order) {
         //Checking whether rank value is smaller than 1
-        if(order<1){
+        if((order+1)<1){
             throw new IllegalStateException("Rank of the customer can not be less than 1.");
         }
         List<String> reservationList = reservationDAL.getCustomerListInOrderOfNumberOfVisit();
@@ -118,6 +118,28 @@ public class ReservationService {
     //Getting number of customer from the beginning (Not The number of visitation, number of different customers)
     public int getNumberOfTotalCustomer() {
         return reservationDAL.getCustomerListInOrderOfNumberOfVisit().size();
+    }
+
+    public Optional<Reservation> getReservationByReservationCodeAndCustomerName(String customer_name, String reservation_code) {
+        //Shortest name possible is 2 char name 2 char surname and blank int the middle which means 5 char long
+        if(customer_name.length()<5){
+            throw new IllegalStateException("Invalid customer name is given.");
+        }
+        //Checking whether reservation code is longer than 3 char long.We already know no matter what our reservation code starts with NLF which is 3 char long
+        else if(reservation_code.length()<3){
+            throw new IllegalStateException("Invalid reservation code is given.");
+        }
+        Optional<Reservation> reservation = reservationDAL.getReservationByReservationCode(reservation_code);
+        //Checking reservation with given reservation code is existed or not
+        if (reservation.isEmpty()){
+            //"Reservation with " + reservation_code + " does not exists." -> Security Leak
+            throw new IllegalStateException("Wrong reservation code or customer name. Check them and try it again.");
+        }
+        else if(!reservation.get().getCustomer_name().equals(customer_name)){
+            // "Reservation with " + reservation_code + " does not belong to " + customer_name+"." - > Security Leak
+            throw new IllegalStateException("Wrong reservation code or customer name. Check them and try it again.");
+        }
+        return reservation;
     }
 
     //Getting all not-expired reservations of a customer
@@ -195,7 +217,8 @@ public class ReservationService {
         //Checking whether reservation with given reservation code is existed or not
         Optional<Reservation> reservation = reservationDAL.getReservationByReservationCode(reservation_code);
         if (reservation.isEmpty()) {
-            throw new IllegalStateException("Reservation with code " + reservation_code + " does not exists and can not be deleted.");
+            //"Reservation with code " + reservation_code + " does not exists and can not be deleted." ->Security Leak
+            throw new IllegalStateException("Wrong reservation code or customer name. Check them and try it again.");
         }
         //Deleting reservation with reservation id
         reservationDAL.deleteById(reservation.get().getReservation_id());
@@ -215,7 +238,8 @@ public class ReservationService {
         Optional<Reservation> reservation = reservationDAL.getReservationByReservationCode(reservation_code);
         //Checking whether reservation with given reservation code is existed or not
         if (reservation.isEmpty()) {
-            throw new IllegalStateException("Reservation with code " + reservation_code + " does not exists and can not be updated.");
+            //"Reservation with code " + reservation_code + " does not exists and can not be updated." -> Security Leak
+            throw new IllegalStateException(" Wrong reservation code or customer name. Check them and try it again.");
         }
         //If date info taken from user is not empty and different from the date info in the db, we update the date parameter of a reservation
         if (date != null && !Objects.equals(reservation.get().getReservation_date(), date)) {

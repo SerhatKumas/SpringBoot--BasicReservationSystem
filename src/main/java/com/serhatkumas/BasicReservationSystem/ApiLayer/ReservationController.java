@@ -114,6 +114,24 @@ public class ReservationController {
         return reservationService.getRestOfTheReservationsToday();
     }
 
+    //Getting reservation details by customer name and reservation code for -> url/show-reservations-by-name-and-reservation-code  endpoint
+    @GetMapping(path = "/show-reservations-by-name-and-reservation-code")
+    public Optional<Reservation> getReservationByReservationCodeAndCustomerName(@RequestBody String query_info) {
+        JSONObject json;
+        String customer_name;
+        String reservation_code;
+        try {
+            //Taking json data from request body
+            json = new JSONObject(query_info);
+            //Parsing required parameters
+            customer_name = json.getString("customer_name");
+            reservation_code = json.getString("reservation_code");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return reservationService.getReservationByReservationCodeAndCustomerName(customer_name, reservation_code);
+    }
+
     //Getting all not-expired reservations of a customer for -> url/show-active-reservations-by-name  endpoint
     @GetMapping(path = "/show-active-reservations-by-name")
     public Optional<Reservation> getActiveReservationOfCustomerByName(@RequestBody String query_info) {
