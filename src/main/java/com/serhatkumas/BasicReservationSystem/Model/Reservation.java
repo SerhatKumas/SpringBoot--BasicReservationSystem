@@ -4,15 +4,19 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+//Reservation object class
 @Entity
 @Table
 public class Reservation {
+    //Indicating the member field below is the primary key of the current entity
     @Id
+    //Incrementing configuration
     @SequenceGenerator(
             name = "reservation",
             sequenceName = "reservation_sequence",
             allocationSize = 1
     )
+    //Generating id automatically
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "reservation_sequence"
@@ -31,9 +35,11 @@ public class Reservation {
 
     private String reservation_code;
 
+    // No arg-constructor
     public Reservation() {
     }
 
+    //Constructor with id feature
     public Reservation(Long reservation_id, String reservation_code, LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
         this.reservation_id = reservation_id;
         this.reservation_date = reservation_date;
@@ -44,7 +50,8 @@ public class Reservation {
         this.reservation_code = reservation_code;
     }
 
-    public Reservation(String reservation_code, LocalDate reservation_date,LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
+    //Constructor without id feature
+    public Reservation(String reservation_code, LocalDate reservation_date, LocalTime reservation_time, String customer_name, String customer_phone_number, int customer_age) {
         this.reservation_date = reservation_date;
         this.reservation_time = reservation_time;
         this.customer_name = customer_name;
@@ -104,8 +111,9 @@ public class Reservation {
     public String getReservation_code() {
         return this.reservation_code;
     }
+
     public void setReservation_code(String reservation_code) {
-        this.reservation_code=reservation_code;
+        this.reservation_code = reservation_code;
     }
 
 }
